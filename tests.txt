@@ -1,0 +1,17 @@
+1
+84
+
+4
+[ valor= 84 , cor= BLACK ] 
+
+1
+87
+
+4
+[ valor= 84 , cor= BLACK ] [ valor= 87 , cor= RED ] 
+
+1
+78
+
+4
+[ valor= 84 , cor= BLACK ] [ valor= 78 , cor= RED ] [ valor= 87 , cor= RED ] 

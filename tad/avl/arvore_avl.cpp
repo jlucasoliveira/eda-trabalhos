@@ -100,26 +100,26 @@ class AVL
 
 		No* rotacao_direita(No* raiz)
 		{
-			No* pt_esq = raiz->esq;
+			No* ptu = raiz->esq;
 			//Rotação Simples para direita
-			if (pt_esq->balanco == -1)
+			if (ptu->balanco == -1)
 			{
-				raiz->esq = pt_esq->dir;
-				pt_esq->dir = raiz;
+				raiz->esq = ptu->dir;
+				ptu->dir = raiz;
 				raiz->balanco = 0;
-				raiz = pt_esq;
+				raiz = ptu;
 			}
 			//Rotação Dupla para direita
 			else
 			{
-				No* pt_dir_esq = pt_esq->dir;
-				pt_esq->dir = pt_dir_esq->esq;
-				pt_dir_esq->dir = pt_esq;
-				raiz->esq = pt_dir_esq->dir;
-				pt_dir_esq->dir = raiz;
-				raiz->balanco = (pt_dir_esq->balanco == -1) ? 1 : 0;
-				pt_esq->balanco = (pt_dir_esq->balanco == 1) ? -1 : 0;
-				raiz = pt_dir_esq;
+				No* ptv = ptu->dir;
+				ptu->dir = ptv->esq;
+				ptv->esq = ptu;
+				raiz->esq = ptv->dir;
+				ptv->dir = raiz;
+				raiz->balanco = (ptv->balanco == -1) ? 1 : 0;
+				ptu->balanco = (ptv->balanco == 1) ? -1 : 0;
+				raiz = ptv;
 			}
 			
 			raiz->balanco = 0;
@@ -129,26 +129,26 @@ class AVL
 
 		No* rotacao_esquerda(No* raiz)
 		{
-			No* pt_dir = raiz->dir;
+			No* ptu = raiz->dir;
 			//Rotação Simples para esquerda
-			if (pt_dir->balanco == 1)
+			if (ptu->balanco == 1)
 			{
-				raiz->dir = pt_dir->esq;
-				pt_dir->esq = raiz;
+				raiz->dir = ptu->esq;
+				ptu->esq = raiz;
 				raiz->balanco = 0;
-				raiz = pt_dir;
+				raiz = ptu;
 			}
 			//Rotação Dupla esquerda
 			else
 			{
-				No* pt_esq_dir = pt_dir->esq;
-				pt_dir->esq = pt_esq_dir->dir;
-				pt_esq_dir->dir = pt_dir;
-				raiz->dir = pt_esq_dir->esq;
-				pt_esq_dir->esq = raiz;
-				raiz->balanco = (pt_esq_dir->balanco == -1) ? 1 : 0;
-				pt_dir->balanco = (pt_esq_dir->balanco == 1) ? -1 : 0;
-				raiz = pt_esq_dir;
+				No* ptv = ptu->esq;
+				ptu->esq = ptv->dir;
+				ptv->dir = ptu;
+				raiz->dir = ptv->esq;
+				ptv->esq = raiz;
+				raiz->balanco = (ptv->balanco == -1) ? 1 : 0;
+				ptu->balanco = (ptv->balanco == 1) ? -1 : 0;
+				raiz = ptv;
 			}
 
 			raiz->balanco = 0;
@@ -178,7 +178,7 @@ class AVL
 						case 0:
 							raiz->balanco = -1;
 							break;
-						case 1:
+						case -2:
 							raiz = rotacao_direita(raiz);
 					}
 				}
@@ -191,14 +191,14 @@ class AVL
 				{
 					switch (raiz->balanco)
 					{
-						case -1:
+						case 1:
 							raiz->balanco = 0;
 							this->desbalanceada = true;
 							break;
 						case 0:
 							raiz->balanco = 1;
 							break;
-						case 1:
+						case 2:
 							rotacao_esquerda(raiz);
 					}
 				}

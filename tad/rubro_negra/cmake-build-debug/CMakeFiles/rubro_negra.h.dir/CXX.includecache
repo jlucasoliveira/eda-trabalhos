@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/exec.cpp
+iostream
+-
+rubro_negra.h
+/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/rubro_negra.h
+
+/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/rubro_negra.h
+iostream
+-
+
