@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/rubro_negra.h.dir/exec.cpp.o  -o rubro_negra.h 

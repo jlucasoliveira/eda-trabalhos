@@ -1,2 +1,0 @@
-/usr/bin/ar qc librubro_negra.a  CMakeFiles/rubro_negra.dir/rubro_negra.cpp.o
-/usr/bin/ranlib librubro_negra.a

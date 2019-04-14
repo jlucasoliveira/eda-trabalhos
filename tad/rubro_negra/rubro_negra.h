@@ -6,22 +6,20 @@
 
 struct no
 {
-	struct no* pai;
-	struct no* esq;
-	struct no* dir;
+	struct no *pai, *esq, *dir;
 	bool cor;
 	int valor;
 
 	no(){
-		this->pai = nullptr;
-		this->esq = nullptr;
-		this->dir = nullptr;
+		this->pai = this->esq = this->dir = nullptr;
 		this->cor = BLACK;
 	}
 
 	no(int valor){
 		this->valor = valor;
 	}
+
+	~no(){}
 };
 
 typedef struct no* No;
@@ -37,8 +35,6 @@ private:
 	std::string cor_string(bool cor);
 	int _abb_altura(No no);
 	void _abb_pre_ordem(No no);
-	void _abb_in_ordem(No no);
-	void _abb_pos_ordem(No no);
 
 	No minimo(No no);
 	No buscar_no(int valor);
@@ -58,8 +54,6 @@ public:
 	void remover(int valor);
 	
 	void abb_pre_ordem();
-	void abb_in_ordem();
-	void abb_pos_ordem();
 };
 
 #endif //RUBRO_NEGRA_RUBRO_NEGRA_H

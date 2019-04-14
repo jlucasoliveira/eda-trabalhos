@@ -46,6 +46,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/rubro_negra.dir/DependInfo.cmake"
-  "CMakeFiles/rubro_negra.h.dir/DependInfo.cmake"
+  "CMakeFiles/testao.dir/DependInfo.cmake"
   )

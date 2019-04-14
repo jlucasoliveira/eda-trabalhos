@@ -1,4 +1,3 @@
-/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug/CMakeFiles/rubro_negra.dir
-/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug/CMakeFiles/rubro_negra.h.dir
+/home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug/CMakeFiles/testao.dir
+/home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug/CMakeFiles/edit_cache.dir

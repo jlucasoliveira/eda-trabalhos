@@ -1,3 +1,0 @@
-/home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug/CMakeFiles/testao.dir
-/home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug/CMakeFiles/edit_cache.dir

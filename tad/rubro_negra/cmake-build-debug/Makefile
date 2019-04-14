@@ -48,24 +48,13 @@ RM = /usr/local/clion/bin/cmake/linux/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra
+CMAKE_SOURCE_DIR = /home/jlucasoliveira/Documentos/development/eda/tad/testao
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug
+CMAKE_BINARY_DIR = /home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/local/clion/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -78,11 +67,22 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/local/clion/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug/CMakeFiles /home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug/CMakeFiles /home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jlucasoliveira/Documentos/development/eda/tad/testao/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,57 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named rubro_negra
+# Target rules for targets named testao
 
 # Build rule for target.
-rubro_negra: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rubro_negra
-.PHONY : rubro_negra
+testao: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 testao
+.PHONY : testao
 
 # fast build rule for target.
-rubro_negra/fast:
-	$(MAKE) -f CMakeFiles/rubro_negra.dir/build.make CMakeFiles/rubro_negra.dir/build
-.PHONY : rubro_negra/fast
+testao/fast:
+	$(MAKE) -f CMakeFiles/testao.dir/build.make CMakeFiles/testao.dir/build
+.PHONY : testao/fast
 
-#=============================================================================
-# Target rules for targets named rubro_negra.h
+main.o: main.cpp.o
 
-# Build rule for target.
-rubro_negra.h: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rubro_negra.h
-.PHONY : rubro_negra.h
-
-# fast build rule for target.
-rubro_negra.h/fast:
-	$(MAKE) -f CMakeFiles/rubro_negra.h.dir/build.make CMakeFiles/rubro_negra.h.dir/build
-.PHONY : rubro_negra.h/fast
-
-exec.o: exec.cpp.o
-
-.PHONY : exec.o
+.PHONY : main.o
 
 # target to build an object file
-exec.cpp.o:
-	$(MAKE) -f CMakeFiles/rubro_negra.h.dir/build.make CMakeFiles/rubro_negra.h.dir/exec.cpp.o
-.PHONY : exec.cpp.o
+main.cpp.o:
+	$(MAKE) -f CMakeFiles/testao.dir/build.make CMakeFiles/testao.dir/main.cpp.o
+.PHONY : main.cpp.o
 
-exec.i: exec.cpp.i
+main.i: main.cpp.i
 
-.PHONY : exec.i
+.PHONY : main.i
 
 # target to preprocess a source file
-exec.cpp.i:
-	$(MAKE) -f CMakeFiles/rubro_negra.h.dir/build.make CMakeFiles/rubro_negra.h.dir/exec.cpp.i
-.PHONY : exec.cpp.i
+main.cpp.i:
+	$(MAKE) -f CMakeFiles/testao.dir/build.make CMakeFiles/testao.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-exec.s: exec.cpp.s
+main.s: main.cpp.s
 
-.PHONY : exec.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-exec.cpp.s:
-	$(MAKE) -f CMakeFiles/rubro_negra.h.dir/build.make CMakeFiles/rubro_negra.h.dir/exec.cpp.s
-.PHONY : exec.cpp.s
+main.cpp.s:
+	$(MAKE) -f CMakeFiles/testao.dir/build.make CMakeFiles/testao.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 rubro_negra.o: rubro_negra.cpp.o
 
@@ -169,7 +156,7 @@ rubro_negra.o: rubro_negra.cpp.o
 
 # target to build an object file
 rubro_negra.cpp.o:
-	$(MAKE) -f CMakeFiles/rubro_negra.dir/build.make CMakeFiles/rubro_negra.dir/rubro_negra.cpp.o
+	$(MAKE) -f CMakeFiles/testao.dir/build.make CMakeFiles/testao.dir/rubro_negra.cpp.o
 .PHONY : rubro_negra.cpp.o
 
 rubro_negra.i: rubro_negra.cpp.i
@@ -178,7 +165,7 @@ rubro_negra.i: rubro_negra.cpp.i
 
 # target to preprocess a source file
 rubro_negra.cpp.i:
-	$(MAKE) -f CMakeFiles/rubro_negra.dir/build.make CMakeFiles/rubro_negra.dir/rubro_negra.cpp.i
+	$(MAKE) -f CMakeFiles/testao.dir/build.make CMakeFiles/testao.dir/rubro_negra.cpp.i
 .PHONY : rubro_negra.cpp.i
 
 rubro_negra.s: rubro_negra.cpp.s
@@ -187,7 +174,7 @@ rubro_negra.s: rubro_negra.cpp.s
 
 # target to generate assembly for a file
 rubro_negra.cpp.s:
-	$(MAKE) -f CMakeFiles/rubro_negra.dir/build.make CMakeFiles/rubro_negra.dir/rubro_negra.cpp.s
+	$(MAKE) -f CMakeFiles/testao.dir/build.make CMakeFiles/testao.dir/rubro_negra.cpp.s
 .PHONY : rubro_negra.cpp.s
 
 # Help Target
@@ -196,13 +183,12 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... rubro_negra"
-	@echo "... rubro_negra.h"
-	@echo "... exec.o"
-	@echo "... exec.i"
-	@echo "... exec.s"
+	@echo "... testao"
+	@echo "... edit_cache"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 	@echo "... rubro_negra.o"
 	@echo "... rubro_negra.i"
 	@echo "... rubro_negra.s"

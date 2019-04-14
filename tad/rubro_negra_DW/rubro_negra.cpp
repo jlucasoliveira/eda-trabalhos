@@ -3,15 +3,19 @@
 
 using namespace std;
 
-// Para a melhor visualização das cores já que obtei em usar valores booleanos
+void RBTree::visitar(No no)
+{
+	cout << "[ valor= " << no->valor << " , cor= " << RBTree::cor_string(no->cor) << " ] ";
+}
+
 string RBTree::cor_string(bool cor){
 	if (cor) return "BLACK";
 	return "RED";
 }
 
-void RBTree::visitar(No no)
-{
-	cout << "[ valor= " << no->valor << " , cor= " << RBTree::cor_string(no->cor) << " ] ";
+No RBTree::minimo(No no){
+	if (no->esq == this->nil) return no;
+	return minimo(no->esq);
 }
 
 No RBTree::_buscar_no(No no, int valor)
@@ -24,24 +28,46 @@ No RBTree::_buscar_no(No no, int valor)
 
 No RBTree::buscar_no(int valor)
 {
-	return _buscar_no(this->raiz, valor);
+	return RBTree::_buscar_no(this->raiz, valor);
 }
 
 void RBTree::_abb_pre_ordem(No no)
 {
 	if (no == this->nil) return;
-	visitar(no);
-	_abb_pre_ordem(no->esq);
-	_abb_pre_ordem(no->dir);
+	RBTree::visitar(no);
+	RBTree::_abb_pre_ordem(no->esq);
+	RBTree::_abb_pre_ordem(no->dir);
 }
-
-/*
- * Função usada apenas para chamar a real função de percurso em pré ordem, respeitando o encapsulamento
- */
 
 void RBTree::abb_pre_ordem()
 {
 	return _abb_pre_ordem(this->raiz);
+}
+
+void RBTree::_abb_in_ordem(No no)
+{
+	if (no == this->nil) return;
+	RBTree::_abb_in_ordem(no->esq);
+	RBTree::visitar(no);
+	RBTree::_abb_in_ordem(no->dir);
+}
+
+void RBTree::abb_in_ordem()
+{
+	return _abb_in_ordem(this->raiz);
+}
+
+void RBTree::_abb_pos_ordem(No no)
+{
+	if (no == this->nil) return;
+	RBTree::_abb_pos_ordem(no->esq);
+	RBTree::_abb_pos_ordem(no->dir);
+	RBTree::visitar(no);
+}
+
+void RBTree::abb_pos_ordem()
+{
+	return _abb_pos_ordem(this->raiz);
 }
 
 int RBTree::_abb_altura(No no)
@@ -52,24 +78,9 @@ int RBTree::_abb_altura(No no)
 	return 1 + (esq > dir ? esq : dir);
 }
 
-/*
- * Função "Externa" de altura; Como a função é recursiva (no caso), e sempre chamará a raiz,
- * criei essa função apenas para facilar a chamado da anterior. Respeitando o encapsulamento.
- */
-
 int RBTree::abb_altura()
 {
 	return _abb_altura(this->raiz);
-}
-
-/*
- * Retorna o nó com o menor valor da árvore/subarvore
- * --Usado pra encontrar o sucessor de um nó a ser removido caso o mesmo tenha dois.
- */
-
-No RBTree::minimo(No no){
-	if (no->esq == this->nil) return no;
-	return minimo(no->esq);
 }
 
 void RBTree::rotacaoEsquerda(No x){
@@ -93,11 +104,10 @@ void RBTree::rotacaoDireita(No x)
 	if (x->pai == this->nil) this->raiz = y;
 	else if (x == x->pai->esq) x->pai->esq = y;
 	else x->pai->dir = y;
-	y->dir = x;
+	y->esq = x;
 	x->pai = y;
 }
 
-// Equivalente ao algoritmo insert_fixup do Cormen, completada;
 void RBTree::balancear_inserir(No z)
 {
 	while (z->pai->cor == RED)
@@ -168,13 +178,8 @@ void RBTree::inserir(int valor)
 	z->esq = this->nil;
 	z->dir = this->nil;
 	z->cor = RED;
-	balancear_inserir(z);
+	RBTree::balancear_inserir(z);
 }
-
-/*
- * Função de transferência de filhos para seu novo pai;
- * Ou transferência dos "familiares" de u para v
- */
 
 void RBTree::transplante(No u, No v)
 {
@@ -184,6 +189,34 @@ void RBTree::transplante(No u, No v)
 	v->pai = u->pai;
 }
 
+void RBTree::deletar_remocao(No z) {
+	No x, y = z;
+	bool y_cor_original = y->cor;
+	if (z->esq == this->nil) {
+		x = z->dir;
+		RBTree::transplante(z, x);
+	} else if (z->dir == this->nil) {
+		x = z->esq;
+		RBTree::transplante(z, x);
+	} else {
+		y = RBTree::minimo(z->dir);
+		y_cor_original = y->cor;
+		No x = y->dir;
+		if (y->pai == z) x->pai = y;
+		else {
+			RBTree::transplante(y, y->dir);
+			y->dir = z->dir;
+			y->dir->pai = y;
+		}
+		RBTree::transplante(z, y);
+		y->esq = z->esq;
+		y->esq->pai = y;
+		y->cor = z->cor;
+		delete z;
+		if (y_cor_original == BLACK) RBTree::balancear_remocao(x);
+	}
+
+}
 void RBTree::balancear_remocao(No x)
 {
 	while (x != this->raiz && x->cor == BLACK)
@@ -195,7 +228,7 @@ void RBTree::balancear_remocao(No x)
 			{
 				w->cor = BLACK;
 				x->pai->cor = RED;
-				rotacaoEsquerda(x->pai);
+				RBTree::rotacaoEsquerda(x->pai);
 				w = x->pai->dir;
 			}
 			if (w->esq->cor == BLACK && w->dir->cor == BLACK)
@@ -209,13 +242,13 @@ void RBTree::balancear_remocao(No x)
 				{
 					w->esq->cor = BLACK;
 					w->cor = RED;
-					rotacaoDireita(w);
+					RBTree::rotacaoDireita(w);
 				}
 					w = x->pai->dir;
 					w->cor = x->pai->cor;
 					x->pai->cor  = BLACK;
 					w->dir->cor = BLACK;
-					rotacaoEsquerda(x->pai);
+					RBTree::rotacaoEsquerda(x->pai);
 					x = this->raiz;
 			}
 		}
@@ -226,7 +259,7 @@ void RBTree::balancear_remocao(No x)
 			{
 				w->cor = BLACK;
 				x->pai->cor = RED;
-				rotacaoDireita(x->pai);
+				RBTree::rotacaoDireita(x->pai);
 				w = x->pai->esq;
 			}
 			if (w->dir->cor == BLACK && w->esq->cor == BLACK)
@@ -240,13 +273,13 @@ void RBTree::balancear_remocao(No x)
 				{
 					w->dir->cor = BLACK;
 					w->cor = RED;
-					rotacaoEsquerda(w);
+					RBTree::rotacaoEsquerda(w);
 				}
 				w = x->pai->esq;
 				w->cor = x->pai->cor;
 				x->pai->cor  = BLACK;
 				w->esq->cor = BLACK;
-				rotacaoDireita(x->pai);
+				RBTree::rotacaoDireita(x->pai);
 				x = this->raiz;
 			}
 		}
@@ -254,45 +287,8 @@ void RBTree::balancear_remocao(No x)
 	}
 }
 
-/*
- * 
- */
-
-void RBTree::deletar_remocao(No z) {
-	No x, y = z;
-	bool y_cor_original = y->cor;
-	if (z->esq == this->nil) {
-		x = z->dir;
-		transplante(z, x);
-	} else if (z->dir == this->nil) {
-		x = z->esq;
-		transplante(z, x);
-	} else {
-		y = minimo(z->dir);
-		y_cor_original = y->cor;
-		No x = y->dir;
-		if (y->pai == z) x->pai = y;
-		else {
-			transplante(y, y->dir);
-			y->dir = z->dir;
-			y->dir->pai = y;
-		}
-		transplante(z, y);
-		y->esq = z->esq;
-		y->esq->pai = y;
-		y->cor = z->cor;
-		delete z;
-		if (y_cor_original == BLACK) balancear_remocao(x);
-	}
-
-}
-
-/*
- * Função que chama a função de busca na árvore e envia o resultado, caso não nulo, para a real função de remoçao
- */
-
 void RBTree::remover(int valor)
 {
 	No no = buscar_no(valor);
-	if (no != nullptr) deletar_remocao(no);
+	if (no != nullptr) this->deletar_remocao(no);
 }
