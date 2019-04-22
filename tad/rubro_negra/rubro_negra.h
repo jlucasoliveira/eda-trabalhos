@@ -1,7 +1,11 @@
 #ifndef RUBRO_NEGRA_RUBRO_NEGRA_H
 #define RUBRO_NEGRA_RUBRO_NEGRA_H
+
+// Definido as cores como "constantes" usando macros; Escolhor usar valores booleanos para as cores
+// já que o custo é de um bit
 #define BLACK true
 #define RED false
+
 #include <iostream>
 
 struct no
@@ -10,16 +14,20 @@ struct no
 	bool cor;
 	int valor;
 
+	// Construtor para o T.nil
 	no(){
 		this->pai = this->esq = this->dir = nullptr;
 		this->cor = BLACK;
 	}
 
+	// Construtor comum, não definimos a cor já que na inserção a adicionados
 	no(int valor){
 		this->valor = valor;
 	}
 
-	~no(){}
+	~no(){
+		delete this;
+	}
 };
 
 typedef struct no* No;
@@ -52,7 +60,6 @@ public:
 	int abb_altura();
 	void inserir(int valor);
 	void remover(int valor);
-	
 	void abb_pre_ordem();
 };
 

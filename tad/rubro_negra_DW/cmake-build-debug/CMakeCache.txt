@@ -223,12 +223,6 @@ rubro_negra_BINARY_DIR:STATIC=/home/jlucasoliveira/Documentos/development/eda/ta
 //Value Computed by CMake
 rubro_negra_SOURCE_DIR:STATIC=/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra
 
-//Value Computed by CMake
-testao_BINARY_DIR:STATIC=/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug
-
-//Value Computed by CMake
-testao_SOURCE_DIR:STATIC=/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra
-
 
 ########################
 # INTERNAL cache entries

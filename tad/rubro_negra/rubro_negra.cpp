@@ -3,7 +3,7 @@
 
 using namespace std;
 
-// Para a melhor visualização das cores já que obtei em usar valores booleanos
+// Para a melhor visualização das cores já que optei em usar valores booleanos
 string RBTree::cor_string(bool cor){
 	if (cor) return "BLACK";
 	return "RED";
@@ -100,11 +100,15 @@ void RBTree::rotacaoDireita(No x)
 // Equivalente ao algoritmo insert_fixup do Cormen, completada;
 void RBTree::balancear_inserir(No z)
 {
+	// Como z é vermelho temos que verificar se seu pai tambem é até a arvore ser normalizada
 	while (z->pai->cor == RED)
 	{
+		// Verificando se pai de z é o filho esquerdo de seu pai
 		if (z->pai == z->pai->pai->esq)
 		{
 			No y = z->pai->pai->dir;
+			// Verificamos a cor do tio de z
+			// Caso for vermelha apenas mudamos a cor do pai e tio para RED e o avo par BLACk
 			if (y->cor == RED)
 			{
 				z->pai->cor = BLACK;
@@ -114,6 +118,8 @@ void RBTree::balancear_inserir(No z)
 			}
 			else
 			{
+				// Como o tio é preto
+				// caso z tenha sido inserido no lado direito, caimos no caso 2, logo temos que girar a esquerda
 				if (z == z->pai->dir)
 				{
 					z = z->pai;
@@ -124,6 +130,7 @@ void RBTree::balancear_inserir(No z)
 				rotacaoDireita(z->pai->pai);
 			}
 		}
+		// Caso simétrico ao anterior
 		else
 		{
 			No y = z->pai->pai->esq;
@@ -147,6 +154,8 @@ void RBTree::balancear_inserir(No z)
 			}
 		}
 	}
+	// Caso finalizar-mos o balanceamento na raiz ela pode se tornar vermelha
+	// violando a prop. II;
 	this->raiz->cor = BLACK;
 }
 
@@ -155,19 +164,28 @@ void RBTree::inserir(int valor)
 	No z = new no(valor);
 	No y = this->nil;
 	No x = this->raiz;
+
+	// Buscando onde o novo no sera adicionado
 	while (x != this->nil)
 	{
+		// Definindo o pai de x
 		y = x;
 		if (z->valor < x->valor) x = x->esq;
 		else x = x->dir;
 	}
+
 	z->pai = y;
+
 	if (y == this->nil) this->raiz = z;
 	else if (z->valor < y->valor) y->esq = z;
 	else y->dir = z;
+
 	z->esq = this->nil;
 	z->dir = this->nil;
+	// Adicionamos com vermelho para não alterar a altura negra diretamente
 	z->cor = RED;
+
+	// Com a inserção do novo no seu pai pode ter a mesmo cor, ou seja, vermelho
 	balancear_inserir(z);
 }
 
@@ -181,7 +199,7 @@ void RBTree::transplante(No u, No v)
 	if (u->pai == this->nil) this->raiz = v;
 	else if (u->pai->esq == u) u->pai->esq = v;
 	else u->pai->dir = v;
-	v->pai = u->pai;
+	if (v != this->nil) v->pai = u->pai;
 }
 
 void RBTree::balancear_remocao(No x)
@@ -259,7 +277,8 @@ void RBTree::balancear_remocao(No x)
  */
 
 void RBTree::deletar_remocao(No z) {
-	No x, y = z;
+	No x;
+	No y = z;
 	bool y_cor_original = y->cor;
 	if (z->esq == this->nil) {
 		x = z->dir;
@@ -270,7 +289,7 @@ void RBTree::deletar_remocao(No z) {
 	} else {
 		y = minimo(z->dir);
 		y_cor_original = y->cor;
-		No x = y->dir;
+		x = y->dir;
 		if (y->pai == z) x->pai = y;
 		else {
 			transplante(y, y->dir);
