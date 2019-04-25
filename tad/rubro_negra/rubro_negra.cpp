@@ -4,7 +4,8 @@
 using namespace std;
 
 // Para a melhor visualização das cores já que optei em usar valores booleanos
-string RBTree::cor_string(bool cor){
+string RBTree::cor_string(bool cor)
+{
 	if (cor) return "BLACK";
 	return "RED";
 }
@@ -67,12 +68,14 @@ int RBTree::abb_altura()
  * --Usado pra encontrar o sucessor de um nó a ser removido caso o mesmo tenha dois.
  */
 
-No RBTree::minimo(No no){
+No RBTree::minimo(No no)
+{
 	if (no->esq == this->nil) return no;
 	return minimo(no->esq);
 }
 
-void RBTree::rotacaoEsquerda(No x){
+void RBTree::rotacao_esquerda(No x)
+{
 	No y = x->dir;
 	x->dir = y->esq;
 	if (y->esq != this->nil) y->esq->pai = x;
@@ -84,7 +87,7 @@ void RBTree::rotacaoEsquerda(No x){
 	x->pai = y;
 }
 
-void RBTree::rotacaoDireita(No x)
+void RBTree::rotacao_direita(No x)
 {
 	No y = x->esq;
 	x->esq = y->dir;
@@ -119,15 +122,16 @@ void RBTree::balancear_inserir(No z)
 			else
 			{
 				// Como o tio é preto
-				// caso z tenha sido inserido no lado direito, caimos no caso 2, logo temos que girar a esquerda
+				// caso z tenha sido inserido no lado direito, caimos no caso 2,
+				// logo temos que girar a esquerda
 				if (z == z->pai->dir)
 				{
 					z = z->pai;
-					rotacaoEsquerda(z);
+					rotacao_esquerda(z);
 				}
 				z->pai->cor = BLACK;
 				z->pai->pai->cor = RED;
-				rotacaoDireita(z->pai->pai);
+				rotacao_direita(z->pai->pai);
 			}
 		}
 		// Caso simétrico ao anterior
@@ -146,11 +150,11 @@ void RBTree::balancear_inserir(No z)
 				if (z == z->pai->esq)
 				{
 					z = z->pai;
-					rotacaoDireita(z);
+					rotacao_direita(z);
 				}
 				z->pai->cor = BLACK;
 				z->pai->pai->cor = RED;
-				rotacaoEsquerda(z->pai->pai);
+				rotacao_esquerda(z->pai->pai);
 			}
 		}
 	}
@@ -213,7 +217,7 @@ void RBTree::balancear_remocao(No x)
 			{
 				w->cor = BLACK;
 				x->pai->cor = RED;
-				rotacaoEsquerda(x->pai);
+				rotacao_esquerda(x->pai);
 				w = x->pai->dir;
 			}
 			if (w->esq->cor == BLACK && w->dir->cor == BLACK)
@@ -227,13 +231,13 @@ void RBTree::balancear_remocao(No x)
 				{
 					w->esq->cor = BLACK;
 					w->cor = RED;
-					rotacaoDireita(w);
+					rotacao_direita(w);
 				}
 					w = x->pai->dir;
 					w->cor = x->pai->cor;
 					x->pai->cor  = BLACK;
 					w->dir->cor = BLACK;
-					rotacaoEsquerda(x->pai);
+					rotacao_esquerda(x->pai);
 					x = this->raiz;
 			}
 		}
@@ -244,7 +248,7 @@ void RBTree::balancear_remocao(No x)
 			{
 				w->cor = BLACK;
 				x->pai->cor = RED;
-				rotacaoDireita(x->pai);
+				rotacao_direita(x->pai);
 				w = x->pai->esq;
 			}
 			if (w->dir->cor == BLACK && w->esq->cor == BLACK)
@@ -258,13 +262,13 @@ void RBTree::balancear_remocao(No x)
 				{
 					w->dir->cor = BLACK;
 					w->cor = RED;
-					rotacaoEsquerda(w);
+					rotacao_esquerda(w);
 				}
 				w = x->pai->esq;
 				w->cor = x->pai->cor;
 				x->pai->cor  = BLACK;
 				w->esq->cor = BLACK;
-				rotacaoDireita(x->pai);
+				rotacao_direita(x->pai);
 				x = this->raiz;
 			}
 		}
@@ -276,7 +280,8 @@ void RBTree::balancear_remocao(No x)
  *
  */
 
-void RBTree::deletar_remocao(No z) {
+void RBTree::deletar_remocao(No z)
+{
 	No x;
 	No y = z;
 	bool y_cor_original = y->cor;
@@ -307,7 +312,8 @@ void RBTree::deletar_remocao(No z) {
 }
 
 /*
- * Função que chama a função de busca na árvore e envia o resultado, caso não nulo, para a real função de remoçao
+ * Função que chama a função de busca na árvore e envia o resultado,
+ * caso não nulo, para a real função de remoçao
  */
 
 void RBTree::remover(int valor)

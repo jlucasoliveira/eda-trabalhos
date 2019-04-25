@@ -48,8 +48,8 @@ private:
 	No buscar_no(int valor);
 	No _buscar_no(No no, int valor);
 
-	void rotacaoEsquerda(No x);
-	void rotacaoDireita(No x);
+	void rotacao_esquerda(No x);
+	void rotacao_direita(No x);
 	void balancear_inserir(No z);
 	void transplante(No u, No v);
 	void deletar_remocao(No z);

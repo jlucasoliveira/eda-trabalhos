@@ -25,23 +25,23 @@ int main()
 	do
 	{
 		res = menu();
+		// Inserir
 		if (res == 1)
 		{
-			// Leitura do valor, o inserindo na arvore
 			int valor;
 			cout << "Valor: ";
 			cin >> valor;
 			arvore.inserir(valor);
-		}
+		}//Remover
 		else if (res == 2)
 		{
-			// Leitura do valor, o buscando na arvore caso existe sera removido
 			int valor;
 			cout << "Valor: ";
 			cin >> valor;
 			arvore.remover(valor);
-		}
+		}//Altura da arvore
 		else if (res == 3) cout << "Altura: " << arvore.abb_altura() << endl << "(Sem contar os T.nil)" << endl;
+		// percurso em pre-ordem
 		else if (res == 4) arvore.abb_pre_ordem();
 	} while (res < 5);
 
