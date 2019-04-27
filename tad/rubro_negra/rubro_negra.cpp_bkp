@@ -68,95 +68,129 @@ int RBTree::abb_altura()
  * --Usado pra encontrar o sucessor de um nó a ser removido caso o mesmo tenha dois filhos.
  */
 
-No RBTree::abb_minimo(No no)
+No RBTree::minimo(No no)
 {
 	if (no->esq == this->nil) return no;
-	return abb_minimo(no->esq);
+	return minimo(no->esq);
 }
 
-void RBTree::rotacao_esquerda(No raiz)
+void RBTree::rotacao_esquerda(No x)
 {
-	No raiz_dir = raiz->dir;
-	raiz->dir = raiz_dir->esq;
-	if (raiz_dir->esq != this->nil) raiz_dir->esq->pai = raiz;
-	if (raiz->pai == this->nil) this->raiz = raiz_dir;
-	else if (raiz->pai->esq == raiz) raiz->pai->esq = raiz_dir;
-	else raiz->pai->dir = raiz_dir; 
-	raiz_dir->pai = raiz->pai;
-	raiz_dir->esq = raiz;
-	raiz->pai = raiz_dir;
+	No y = x->dir;
+	x->dir = y->esq;
+	if (y->esq != this->nil) y->esq->pai = x;
+	y->pai = x->pai;
+	if (x->pai == this->nil) this->raiz = y;
+	else if (x == x->pai->esq) x->pai->esq = y;
+	else x->pai->dir = y;
+	y->esq = x;
+	x->pai = y;
 }
 
 void RBTree::rotacao_direita(No x)
 {
-	No raiz_esq = raiz->esq;
-	raiz->esq = raiz_esq->dir;
-	if (raiz_esq->dir != this->nil) raiz_esq->dir->pai = raiz;
-	if (raiz->pai == this->nil) this->raiz = raiz_esq;
-	else if (raiz->pai->esq == raiz) raiz->pai->esq = raiz_esq;
-	else raiz->pai->dir = raiz_esq; 
-	raiz_esq->pai = raiz->pai;
-	raiz_esq->dir = raiz;
-	raiz->pai = raiz_esq;
+	No y = x->esq;
+	x->esq = y->dir;
+	if (y->dir != this->nil) y->dir->pai = x;
+	y->pai = x->pai;
+	if (x->pai == this->nil) this->raiz = y;
+	else if (x == x->pai->esq) x->pai->esq = y;
+	else x->pai->dir = y;
+	y->dir = x;
+	x->pai = y;
 }
 
 // Equivalente ao algoritmo insert_fixup do Cormen, completada;
-void RBTree::balancear_inserir(No novo_no)
+void RBTree::balancear_inserir(No z)
 {
-	No no_tio;
-	// caso o pai do novo seja vermelho,
-	// ou seja, enfrige a Prop. IV
-	while (!novo_no->pai->cor)
+	// Como z é vermelho temos que verificar se seu pai tambem é até a arvore ser normalizada
+	while (z->pai->cor == RED)
 	{
-		if (novo_no->pai->pai->esq == novo_no->pai) no_tio = novo_no->pai->pai->dir;
-		else no_tio = novo_no->pai->esq;
-
-		// caso o tio do novo no seja vermelho
-		if (!no_tio->cor)
+		// Verificando se pai de z é o filho esquerdo de seu pai
+		if (z->pai == z->pai->pai->esq)
 		{
-			novo_no->pai->cor = no_tio->cor = BLACK;
-			novo_no->pai->pai->cor = RED;
-			novo_no = novo_no->pai->pai;
+			No y = z->pai->pai->dir;
+			// Verificamos a cor do tio de z
+			// Caso for vermelha apenas mudamos a cor do pai e tio para RED e o avo par BLACk
+			if (y->cor == RED)
+			{
+				z->pai->cor = BLACK;
+				y->cor = BLACK;
+				z->pai->pai->cor = RED;
+				z = z->pai->pai;
+			}
+			else
+			{
+				// Como o tio é preto
+				// caso z tenha sido inserido no lado direito, caimos no caso 2,
+				// logo temos que girar a esquerda
+				if (z == z->pai->dir)
+				{
+					z = z->pai;
+					rotacao_esquerda(z);
+				}
+				z->pai->cor = BLACK;
+				z->pai->pai->cor = RED;
+				rotacao_direita(z->pai->pai);
+			}
 		}
+		// Caso simétrico ao anterior
 		else
 		{
-			if (novo_no->pai->esq == novo_no)
+			No y = z->pai->pai->esq;
+			if (y->cor == RED)
 			{
-				novo_no->pai->cor = BLACK;
-				novo_no->pai->pai->cor = RED;
-				if (no_tio->pai->dir == no_tio)
-					rotacao_direita(novo_no->pai->pai);
-				else rotacao_esquerda(novo_no->pai->pai);
+				z->pai->cor = BLACK;
+				y->cor = BLACK;
+				z->pai->pai->cor = RED;
+				z = z->pai->pai;
+			}
+			else
+			{
+				if (z == z->pai->esq)
+				{
+					z = z->pai;
+					rotacao_direita(z);
+				}
+				z->pai->cor = BLACK;
+				z->pai->pai->cor = RED;
+				rotacao_esquerda(z->pai->pai);
 			}
 		}
 	}
+	// Caso finalizar-mos o balanceamento na raiz ela pode se tornar vermelha
+	// violando a prop. II;
 	this->raiz->cor = BLACK;
 }
 
 void RBTree::inserir(int valor)
 {
-	No novo_no = new(nothrow) no(valor);
-	No tmp = this->raiz;
-	No tmp_pai = this->nil;
+	No z = new no(valor);
+	No y = this->nil;
+	No x = this->raiz;
 
-	while (tmp != this->nil)
+	// Buscando onde o novo no sera adicionado
+	while (x != this->nil)
 	{
-		// Definido o pai do novo no, ou seja procurando sua posicao na arvore
-		tmp_pai = tmp;
-		if (tmp->valor > valor) tmp = tmp->esq;
-		else tmp = tmp->esq;
+		// Definindo o pai de x
+		y = x;
+		if (z->valor < x->valor) x = x->esq;
+		else x = x->dir;
 	}
 
-	// inserindo o novo no como filho de seu pai e atribuindo valores
-	// padroes ao novo no
-	if (tmp_pai == this->nil) this->raiz = novo_no;
-	if (tmp_pai->valor < valor) tmp_pai->dir = novo_no;
-	else tmp_pai->esq = novo_no;
+	z->pai = y;
 
-	novo_no->pai = tmp_pai;
-	novo_no->esq = novo_no->dir = this->nil; 
+	if (y == this->nil) this->raiz = z;
+	else if (z->valor < y->valor) y->esq = z;
+	else y->dir = z;
 
-	balancear_inserir(novo_no);
+	z->esq = this->nil;
+	z->dir = this->nil;
+	// Adicionamos com vermelho para não alterar a altura negra diretamente
+	z->cor = RED;
+
+	// Com a inserção do novo no seu pai pode ter a mesmo cor, ou seja, vermelho
+	balancear_inserir(z);
 }
 
 /*
@@ -258,7 +292,7 @@ void RBTree::deletar_remocao(No z)
 		x = z->esq;
 		transplante(z, x);
 	} else {
-		y = abb_minimo(z->dir);
+		y = minimo(z->dir);
 		y_cor_original = y->cor;
 		x = y->dir;
 		if (y->pai == z) x->pai = y;

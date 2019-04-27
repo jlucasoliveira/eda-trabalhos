@@ -16,6 +16,15 @@ Heap::Heap()
     this->queue = new int[this->capacity];
 }
 
+Heap::Heap(int* vet, int n)
+{
+    this->size = this->capacity = n;
+    this->queue = vet;
+    for (int i = n/2; i > 0; i--)
+        this->max_down(i);
+    
+}
+
 void Heap::recapacity()
 {
     this->capacity*=2;
@@ -81,5 +90,7 @@ int Heap::max_remove()
 
 int Heap::extract()
 {
-    return this->queue[1];
+    if (this->size > 0)
+        return this->queue[1];
+    std::cout << "Erro::Heap vazio";
 }
