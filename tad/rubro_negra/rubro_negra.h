@@ -13,7 +13,7 @@ struct no
 
 	// Construtor para o T.nil
 	no(){
-		this->pai = this->esq = this->dir = nullptr;
+		this->pai = this->esq = this->dir = this;
 		this->cor = BLACK;
 	}
 
@@ -37,11 +37,15 @@ private:
 	int _abb_altura(No);
 	void _abb_pre_ordem(No);
 
+	No ab_irmao(No);
 	No abb_minimo(No);
 	No buscar_no(int);
 	No _buscar_no(No, int);
 
 	int ab_num_filhos(No);
+	void removerBB(No);
+
+	//void transplante(No, No);
 	void rotacao_esquerda(No);
 	void rotacao_direita(No);
 	void balancear_inserir(No);
@@ -50,7 +54,7 @@ private:
 	void balancear_remocao(No);
 
 public:
-	~RBTree();
+	//~RBTree();
 	int abb_altura();
 	void inserir(int);
 	void remover(int);

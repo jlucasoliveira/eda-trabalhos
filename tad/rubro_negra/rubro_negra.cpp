@@ -183,11 +183,19 @@ void RBTree::inserir(int valor)
 	balancear_inserir(novo_no);
 }
 
+// Recebe um no qualquer e retorna o numero de filhos
 int RBTree::ab_num_filhos(No pai)
 {
 	if (pai->esq == pai->dir) return 0;
 	else if (pai->esq == this->nil || pai->dir == this->nil) return 1;
 	else return 2;
+}
+
+// retorna o irmao de um determinado no
+No RBTree::ab_irmao(No node)
+{
+	if (node->pai->esq == node) return node->pai->dir;
+	return node->pai->esq;
 }
 
 /*
@@ -197,7 +205,8 @@ int RBTree::ab_num_filhos(No pai)
 
 void RBTree::substitui(No removido, No substituto)
 {
-	if (removido->pai->esq == removido)
+	if (this->raiz == removido) this->raiz = substituto;
+	else if (removido->pai->esq == removido)
 		removido->pai->esq = substituto;
 	else removido->pai->dir = substituto;
 
@@ -205,111 +214,80 @@ void RBTree::substitui(No removido, No substituto)
 		substituto->pai = removido->pai;
 }
 
-void RBTree::balancear_remocao(No x)
+void RBTree::removerBB(No node)
 {
-	while (x != this->raiz && x->cor == BLACK)
+	No irmao = ab_irmao(node);
+	if (irmao->cor)
 	{
-		if (x == x->pai->esq)
+		if (irmao->dir->cor && irmao->esq->cor)
 		{
-			No w = x->pai->dir;
-			if (w->cor == RED)
-			{
-				w->cor = BLACK;
-				x->pai->cor = RED;
-				rotacao_esquerda(x->pai);
-				w = x->pai->dir;
-			}
-			if (w->esq->cor == BLACK && w->dir->cor == BLACK)
-			{
-				w->cor = RED;
-				x = x->pai;
-			}
-			else
-			{
-				if (w->dir->cor == BLACK)
-				{
-					w->esq->cor = BLACK;
-					w->cor = RED;
-					rotacao_direita(w);
-				}
-					w = x->pai->dir;
-					w->cor = x->pai->cor;
-					x->pai->cor  = BLACK;
-					w->dir->cor = BLACK;
-					rotacao_esquerda(x->pai);
-					x = this->raiz;
-			}
+			if (!irmao->pai->cor) irmao->pai->cor = BLACK;
+			if (irmao != this->nil) irmao->cor = RED;
+		}
+		else if (irmao->dir->cor && !irmao->esq->cor)
+		{
+			irmao->cor = RED;
+			irmao->esq->cor = BLACK;
+			if (irmao->pai->dir == irmao)
+				rotacao_direita(irmao);
+			//else rotacao_esquerda(irmao);
 		}
 		else
 		{
-			No w = x->pai->esq;
-			if (w->cor == RED)
-			{
-				w->cor = BLACK;
-				x->pai->cor = RED;
-				rotacao_direita(x->pai);
-				w = x->pai->esq;
-			}
-			if (w->dir->cor == BLACK && w->esq->cor == BLACK)
-			{
-				w->cor = RED;
-				x = x->pai;
-			}
+			bool pai_cor = irmao->pai->cor;
+			irmao->pai->cor = BLACK;
+			irmao->cor = pai_cor;
+			irmao->dir->cor = BLACK;
+			if (irmao->pai->dir == irmao)
+				rotacao_esquerda(irmao->pai);
 			else
 			{
-				if (w->esq->cor == BLACK)
+				if (irmao->esq)
 				{
-					w->dir->cor = BLACK;
-					w->cor = RED;
-					rotacao_esquerda(w);
-				}
-				w = x->pai->esq;
-				w->cor = x->pai->cor;
-				x->pai->cor  = BLACK;
-				w->esq->cor = BLACK;
-				rotacao_direita(x->pai);
-				x = this->raiz;
+					rotacao_esquerda(irmao);
+					rotacao_direita(irmao->pai->pai);
+				}else rotacao_direita(irmao->pai);
+
 			}
 		}
-		x->cor = BLACK;
 	}
+	else
+	{
+		irmao->pai->cor = RED;
+		irmao->cor = BLACK;
+		if (irmao->pai->dir == irmao)
+			rotacao_esquerda(irmao->pai);
+		else rotacao_direita(irmao->pai);
+	}
+	this->raiz->cor = BLACK;
 }
-
-/*
- *
- */
 
 void RBTree::deletar_remocao(No node)
 {
 	int num_filhos = ab_num_filhos(node);
-	bool cor_original = node->cor;
 	if (num_filhos == 1)
 	{
 		No filho = node->esq;
 		if (filho == this->nil) filho = node->dir;
 		substitui(node, filho);
-		if (node->cor && !filho->cor) filho->cor = node->cor;
+		if (node->cor)
+			if (!filho->cor) filho->cor = node->cor;
+			else removerBB(filho);
 		delete node;
 	}
 	else
 	{
 		if (num_filhos == 0)
 		{
-			if (!node->cor)
-			{
-				substitui(node, this->nil);
-				delete node;
-			}
-			else ;
+			if (node->cor) removerBB(node);
+			substitui(node, this->nil);
+			delete node;
 		}
 		else
 		{
 			No sucessor = abb_minimo(node->dir);
-			if (!node->cor)
-			{
-				node->valor = sucessor->valor;
-				deletar_remocao(sucessor);
-			}
+			node->valor = sucessor->valor;
+			deletar_remocao(sucessor);
 		}
 	}
 }

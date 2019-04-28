@@ -6,11 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/rubro_negra.cpp
+/home/joao/atividades_eda/tad/rubro_negra/main.cpp
 iostream
 -
 rubro_negra.h
-/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/rubro_negra.h
+/home/joao/atividades_eda/tad/rubro_negra/rubro_negra.h
 
-/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/rubro_negra.h
+/home/joao/atividades_eda/tad/rubro_negra/rubro_negra.cpp
+iostream
+-
+rubro_negra.h
+/home/joao/atividades_eda/tad/rubro_negra/rubro_negra.h
+
+/home/joao/atividades_eda/tad/rubro_negra/rubro_negra.h
 

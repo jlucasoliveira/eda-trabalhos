@@ -68,10 +68,10 @@ int RBTree::abb_altura()
  * --Usado pra encontrar o sucessor de um nó a ser removido caso o mesmo tenha dois filhos.
  */
 
-No RBTree::minimo(No no)
+No RBTree::abb_minimo(No no)
 {
 	if (no->esq == this->nil) return no;
-	return minimo(no->esq);
+	return abb_minimo(no->esq);
 }
 
 void RBTree::rotacao_esquerda(No x)
@@ -292,7 +292,7 @@ void RBTree::deletar_remocao(No z)
 		x = z->esq;
 		transplante(z, x);
 	} else {
-		y = minimo(z->dir);
+		y = abb_minimo(z->dir);
 		y_cor_original = y->cor;
 		x = y->dir;
 		if (y->pai == z) x->pai = y;
