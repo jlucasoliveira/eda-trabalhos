@@ -22,10 +22,6 @@ struct no
 		this->valor = valor;
 		this->cor = RED;
 	}
-
-	~no(){
-		delete this;
-	}
 };
 
 typedef struct no* No;
@@ -45,15 +41,16 @@ private:
 	No buscar_no(int);
 	No _buscar_no(No, int);
 
+	int ab_num_filhos(No);
 	void rotacao_esquerda(No);
 	void rotacao_direita(No);
 	void balancear_inserir(No);
-	void transplante(No, No);
+	void substitui(No, No);
 	void deletar_remocao(No);
 	void balancear_remocao(No);
 
 public:
-
+	~RBTree();
 	int abb_altura();
 	void inserir(int);
 	void remover(int);

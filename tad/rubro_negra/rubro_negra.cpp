@@ -74,30 +74,30 @@ No RBTree::abb_minimo(No no)
 	return abb_minimo(no->esq);
 }
 
-void RBTree::rotacao_esquerda(No raiz)
+void RBTree::rotacao_esquerda(No eixo)
 {
-	No raiz_dir = raiz->dir;
-	raiz->dir = raiz_dir->esq;
-	if (raiz_dir->esq != this->nil) raiz_dir->esq->pai = raiz;
-	if (raiz->pai == this->nil) this->raiz = raiz_dir;
-	else if (raiz->pai->esq == raiz) raiz->pai->esq = raiz_dir;
-	else raiz->pai->dir = raiz_dir; 
-	raiz_dir->pai = raiz->pai;
-	raiz_dir->esq = raiz;
-	raiz->pai = raiz_dir;
+	No filho_direito = eixo->dir;
+	eixo->dir = filho_direito->esq;
+	if (filho_direito->esq != this->nil) filho_direito->esq->pai = eixo;
+	filho_direito->pai = eixo->pai;
+	if (eixo->pai == this->nil) this->raiz = filho_direito;
+	else if (eixo->pai->esq == eixo) eixo->pai->esq = filho_direito;
+	else eixo->pai->dir = filho_direito; 
+	filho_direito->esq = eixo;
+	eixo->pai = filho_direito;
 }
 
-void RBTree::rotacao_direita(No x)
+void RBTree::rotacao_direita(No eixo)
 {
-	No raiz_esq = raiz->esq;
-	raiz->esq = raiz_esq->dir;
-	if (raiz_esq->dir != this->nil) raiz_esq->dir->pai = raiz;
-	if (raiz->pai == this->nil) this->raiz = raiz_esq;
-	else if (raiz->pai->esq == raiz) raiz->pai->esq = raiz_esq;
-	else raiz->pai->dir = raiz_esq; 
-	raiz_esq->pai = raiz->pai;
-	raiz_esq->dir = raiz;
-	raiz->pai = raiz_esq;
+	No filho_esquerdo = eixo->esq;
+	eixo->esq = filho_esquerdo->dir;
+	if (filho_esquerdo->dir != this->nil) filho_esquerdo->dir->pai = eixo;
+	filho_esquerdo->pai = eixo->pai;
+	if (eixo->pai == this->nil) this->raiz = filho_esquerdo;
+	else if (eixo->pai->esq == eixo) eixo->pai->esq = filho_esquerdo;
+	else eixo->pai->dir = filho_esquerdo;
+	filho_esquerdo->dir = eixo;
+	eixo->pai = filho_esquerdo;
 }
 
 // Equivalente ao algoritmo insert_fixup do Cormen, completada;
@@ -108,26 +108,43 @@ void RBTree::balancear_inserir(No novo_no)
 	// ou seja, enfrige a Prop. IV
 	while (!novo_no->pai->cor)
 	{
-		if (novo_no->pai->pai->esq == novo_no->pai) no_tio = novo_no->pai->pai->dir;
-		else no_tio = novo_no->pai->esq;
-
-		// caso o tio do novo no seja vermelho
-		if (!no_tio->cor)
+		if (novo_no->pai->pai->esq == novo_no->pai)
 		{
-			novo_no->pai->cor = no_tio->cor = BLACK;
-			novo_no->pai->pai->cor = RED;
-			novo_no = novo_no->pai->pai;
+			no_tio = novo_no->pai->pai->dir;
+			if (no_tio->cor)
+			{
+				if (novo_no->pai->dir == novo_no)
+				{
+					novo_no = novo_no->pai;
+					rotacao_esquerda(novo_no);
+				}
+				novo_no->pai->cor = BLACK;
+				novo_no->pai->pai->cor = RED;
+				rotacao_direita(novo_no->pai->pai);
+			}
 		}
 		else
 		{
-			if (novo_no->pai->esq == novo_no)
+			no_tio = novo_no->pai->pai->esq;
+			if (no_tio->cor)
 			{
+				if (novo_no->pai->esq == novo_no)
+				{
+					novo_no = novo_no->pai;
+					rotacao_direita(novo_no);
+				}
 				novo_no->pai->cor = BLACK;
 				novo_no->pai->pai->cor = RED;
-				if (no_tio->pai->dir == no_tio)
-					rotacao_direita(novo_no->pai->pai);
-				else rotacao_esquerda(novo_no->pai->pai);
+				rotacao_esquerda(novo_no->pai->pai);
 			}
+		}
+
+		if (!no_tio->cor)
+		{
+			novo_no->pai->cor = BLACK;
+			no_tio->cor = BLACK;
+			novo_no->pai->pai->cor = RED;
+			novo_no = novo_no->pai->pai;
 		}
 	}
 	this->raiz->cor = BLACK;
@@ -136,6 +153,12 @@ void RBTree::balancear_inserir(No novo_no)
 void RBTree::inserir(int valor)
 {
 	No novo_no = new(nothrow) no(valor);
+	if (novo_no == nullptr)
+	{
+		cout << "Erro:: Não foi possivel alocar memoria";
+		exit(1);
+	}
+
 	No tmp = this->raiz;
 	No tmp_pai = this->nil;
 
@@ -144,19 +167,27 @@ void RBTree::inserir(int valor)
 		// Definido o pai do novo no, ou seja procurando sua posicao na arvore
 		tmp_pai = tmp;
 		if (tmp->valor > valor) tmp = tmp->esq;
-		else tmp = tmp->esq;
+		else tmp = tmp->dir;
 	}
 
 	// inserindo o novo no como filho de seu pai e atribuindo valores
 	// padroes ao novo no
 	if (tmp_pai == this->nil) this->raiz = novo_no;
-	if (tmp_pai->valor < valor) tmp_pai->dir = novo_no;
+	else if (tmp_pai->valor < valor) tmp_pai->dir = novo_no;
 	else tmp_pai->esq = novo_no;
 
 	novo_no->pai = tmp_pai;
-	novo_no->esq = novo_no->dir = this->nil; 
+	novo_no->esq = this->nil;
+	novo_no->dir = this->nil;
 
 	balancear_inserir(novo_no);
+}
+
+int RBTree::ab_num_filhos(No pai)
+{
+	if (pai->esq == pai->dir) return 0;
+	else if (pai->esq == this->nil || pai->dir == this->nil) return 1;
+	else return 2;
 }
 
 /*
@@ -164,12 +195,14 @@ void RBTree::inserir(int valor)
  * Ou transferência dos "familiares" de u para v
  */
 
-void RBTree::transplante(No u, No v)
+void RBTree::substitui(No removido, No substituto)
 {
-	if (u->pai == this->nil) this->raiz = v;
-	else if (u->pai->esq == u) u->pai->esq = v;
-	else u->pai->dir = v;
-	if (v != this->nil) v->pai = u->pai;
+	if (removido->pai->esq == removido)
+		removido->pai->esq = substituto;
+	else removido->pai->dir = substituto;
+
+	if (substituto != this->nil)
+		substituto->pai = removido->pai;
 }
 
 void RBTree::balancear_remocao(No x)
@@ -246,35 +279,39 @@ void RBTree::balancear_remocao(No x)
  *
  */
 
-void RBTree::deletar_remocao(No z)
+void RBTree::deletar_remocao(No node)
 {
-	No x;
-	No y = z;
-	bool y_cor_original = y->cor;
-	if (z->esq == this->nil) {
-		x = z->dir;
-		transplante(z, x);
-	} else if (z->dir == this->nil) {
-		x = z->esq;
-		transplante(z, x);
-	} else {
-		y = abb_minimo(z->dir);
-		y_cor_original = y->cor;
-		x = y->dir;
-		if (y->pai == z) x->pai = y;
-		else {
-			transplante(y, y->dir);
-			y->dir = z->dir;
-			y->dir->pai = y;
-		}
-		transplante(z, y);
-		y->esq = z->esq;
-		y->esq->pai = y;
-		y->cor = z->cor;
-		delete z;
-		if (y_cor_original == BLACK) balancear_remocao(x);
+	int num_filhos = ab_num_filhos(node);
+	bool cor_original = node->cor;
+	if (num_filhos == 1)
+	{
+		No filho = node->esq;
+		if (filho == this->nil) filho = node->dir;
+		substitui(node, filho);
+		if (node->cor && !filho->cor) filho->cor = node->cor;
+		delete node;
 	}
-
+	else
+	{
+		if (num_filhos == 0)
+		{
+			if (!node->cor)
+			{
+				substitui(node, this->nil);
+				delete node;
+			}
+			else ;
+		}
+		else
+		{
+			No sucessor = abb_minimo(node->dir);
+			if (!node->cor)
+			{
+				node->valor = sucessor->valor;
+				deletar_remocao(sucessor);
+			}
+		}
+	}
 }
 
 /*
