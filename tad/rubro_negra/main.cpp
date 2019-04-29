@@ -1,3 +1,9 @@
+/*
+ * Autor: José Lucas Olveira da Silva
+ * Matrícula: 0421691
+ */
+
+
 #include <iostream>
 #include "rubro_negra.h"
 

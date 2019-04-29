@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/joao/atividades_eda/tad/rubro_negra/main.cpp" "/home/joao/atividades_eda/tad/rubro_negra/cmake-build-debug/CMakeFiles/testao.dir/main.cpp.o"
-  "/home/joao/atividades_eda/tad/rubro_negra/rubro_negra.cpp" "/home/joao/atividades_eda/tad/rubro_negra/cmake-build-debug/CMakeFiles/testao.dir/rubro_negra.cpp.o"
+  "/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/main.cpp" "/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug/CMakeFiles/testao.dir/main.cpp.o"
+  "/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/rubro_negra.cpp" "/home/jlucasoliveira/Documentos/development/eda/tad/rubro_negra/cmake-build-debug/CMakeFiles/testao.dir/rubro_negra.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

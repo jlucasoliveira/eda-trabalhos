@@ -1,3 +1,9 @@
+/*
+ * Autor: José Lucas Olveira da Silva
+ * Matrícula: 0421691
+ */
+
+
 #ifndef RUBRO_NEGRA_RUBRO_NEGRA_H
 #define RUBRO_NEGRA_RUBRO_NEGRA_H
 
@@ -44,17 +50,15 @@ private:
 
 	int ab_num_filhos(No);
 	void removerBB(No);
-
-	//void transplante(No, No);
 	void rotacao_esquerda(No);
 	void rotacao_direita(No);
 	void balancear_inserir(No);
 	void substitui(No, No);
 	void deletar_remocao(No);
-	void balancear_remocao(No);
+	void destroir_arvore(No);
 
 public:
-	//~RBTree();
+	~RBTree();
 	int abb_altura();
 	void inserir(int);
 	void remover(int);

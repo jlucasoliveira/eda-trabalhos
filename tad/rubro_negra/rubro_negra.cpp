@@ -1,3 +1,9 @@
+/*
+ * Autor: José Lucas Olveira da Silva
+ * Matrícula: 0421691
+ */
+
+
 #include <iostream>
 #include "rubro_negra.h"
 
@@ -199,8 +205,7 @@ No RBTree::ab_irmao(No node)
 }
 
 /*
- * Função de transferência de filhos para seu novo pai;
- * Ou transferência dos "familiares" de u para v
+ * Substitui um determinado nó por outro "aos olhos do pai"
  */
 
 void RBTree::substitui(No removido, No substituto)
@@ -219,38 +224,53 @@ void RBTree::removerBB(No node)
 	No irmao = ab_irmao(node);
 	if (irmao->cor)
 	{
+			// caso 2
 		if (irmao->dir->cor && irmao->esq->cor)
 		{
 			if (!irmao->pai->cor) irmao->pai->cor = BLACK;
 			if (irmao != this->nil) irmao->cor = RED;
 		}
-		else if (irmao->dir->cor && !irmao->esq->cor)
-		{
-			irmao->cor = RED;
-			irmao->esq->cor = BLACK;
-			if (irmao->pai->dir == irmao)
-				rotacao_direita(irmao);
-			//else rotacao_esquerda(irmao);
-		}
 		else
 		{
-			bool pai_cor = irmao->pai->cor;
-			irmao->pai->cor = BLACK;
-			irmao->cor = pai_cor;
-			irmao->dir->cor = BLACK;
 			if (irmao->pai->dir == irmao)
-				rotacao_esquerda(irmao->pai);
+			{
+				// caso 3
+				if (irmao->dir->cor && !irmao->esq->cor)
+				{
+					irmao->cor = RED;
+					irmao->esq->cor = BLACK;
+					rotacao_direita(irmao);
+				}
+					// caso 4
+				else {
+					bool pai_cor = irmao->pai->cor;
+					irmao->pai->cor = BLACK;
+					irmao->cor = pai_cor;
+					irmao->dir->cor = BLACK;
+					rotacao_esquerda(irmao->pai);
+				}
+			}
 			else
 			{
-				if (irmao->esq)
+				// caso 3
+				if (irmao->esq->cor && !irmao->dir->cor)
 				{
+					irmao->cor = RED;
+					irmao->dir->cor = BLACK;
 					rotacao_esquerda(irmao);
-					rotacao_direita(irmao->pai->pai);
-				}else rotacao_direita(irmao->pai);
-
+				}
+					// caso 4
+				else {
+					bool pai_cor = irmao->pai->cor;
+					irmao->pai->cor = BLACK;
+					irmao->cor = pai_cor;
+					irmao->esq->cor = BLACK;
+					rotacao_direita(irmao->pai);
+				}
 			}
 		}
 	}
+		// caso 1
 	else
 	{
 		irmao->pai->cor = RED;
@@ -271,8 +291,10 @@ void RBTree::deletar_remocao(No node)
 		if (filho == this->nil) filho = node->dir;
 		substitui(node, filho);
 		if (node->cor)
+		{
 			if (!filho->cor) filho->cor = node->cor;
 			else removerBB(filho);
+		}
 		delete node;
 	}
 	else
@@ -301,4 +323,18 @@ void RBTree::remover(int valor)
 {
 	No no = buscar_no(valor);
 	if (no != nullptr) deletar_remocao(no);
+}
+
+void RBTree::destroir_arvore(No node)
+{
+	if (node == this->nil) return;
+	destroir_arvore(node->esq);
+	destroir_arvore(node->dir);
+	delete node;
+}
+
+RBTree::~RBTree()
+{
+	destroir_arvore(this->raiz);
+	delete this->nil;
 }

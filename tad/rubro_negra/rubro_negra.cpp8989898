@@ -306,9 +306,8 @@ void RBTree::deletar_remocao(No z)
 		y->esq->pai = y;
 		y->cor = z->cor;
 		delete z;
-		if (y_cor_original == BLACK) balancear_remocao(x);
 	}
-
+	if (y_cor_original == BLACK) balancear_remocao(x);
 }
 
 /*
