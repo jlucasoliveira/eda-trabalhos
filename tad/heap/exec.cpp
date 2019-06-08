@@ -1,6 +1,5 @@
 #include <iostream>
-#include "heap.h"
-#include <vector>;
+#include "HeapMax.h"
 
 using namespace std;
 
@@ -17,26 +16,11 @@ int menu()
 	return res;
 }
 
-Heap* build_heap_from_input()
-{
-	int valor, n;
-	cout << "Tamanho do vetor: ";
-	cin >> n;
-	int* vet = new int[n];
-	
-	for (int i = i; i <= n; i++)
-	{
-		cout << "Valor: ";
-		cin >> valor;
-		vet[i] = valor;
-	}
-	return new Heap(vet, n);
-}
-
 int main()
 {
 
-	Heap* ed = new Heap();
+	HeapMax *ed;
+	ed = new HeapMax();
 	int res;
 	do
 	{
@@ -46,11 +30,11 @@ int main()
 			int valor;
 			cout << "Valor: ";
 			cin >> valor;
-			ed->max_insert(valor);
+			ed->insert(valor);
 		}
-		else if (res == 2) ed->max_remove();
+		else if (res == 2) ed->remove();
 		else if (res == 3) cout << "Valor: " << ed->extract();
-		else if (res == 4)
+		else if (res == 4);
 		
 	} while (res < 4);
 
