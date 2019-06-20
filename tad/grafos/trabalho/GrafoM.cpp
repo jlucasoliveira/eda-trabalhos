@@ -35,7 +35,7 @@ void Grafo::addEdge(int u, int v)
 {
     if (u >= this->V || v >= this->V)
     {
-        cout << "Valor(es) incorreto(s)...";
+        cout << "Valor(es) incorreto(s)..." << endl;
         return;
     }
     this->M[u][v] = 1;
@@ -192,23 +192,38 @@ void Grafo::coloringWithTwoColors(int starter)
 
 void Grafo::detectingQuatraticCycles()
 {
-    int size = this->V;
-
+    int u, v, size = this->V;
     int mult[size][size];
 
+    // Zerando a matriz mult
     for (int i = 0; i < size; i++)
         for (int j = 0; j < size; j++)
             mult[i][j] = 0;
     
+    // Calculando M^2
     for (int i = 0; i < size; i++)
         for (int j = 0; j < size; j++)
             for (int k = 0; k < size; k++)
                 mult[i][j] += this->M[i][k] * this->M[k][j];
 
     for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+        {
+            if (i != j && mult[i][j] == mult[j][i])
+            {
+                if (!this->directed)
+                {
+                    for (int k = 0; k < size; k++)
+                        if (this->M[k][i] == this->M[k][j])
+                            if (false);
+                }
+            }
+        }
+
+    for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++)
-            cout << std::setw(1) << mult[i][j] << " ";
+            cout << setw(1) << mult[i][j] << " ";
         cout << endl;
     }
 }
