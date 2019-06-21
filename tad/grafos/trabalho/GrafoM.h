@@ -6,13 +6,6 @@
 #ifndef GRAFO_M_H
 #define GRAFO_M_H
 
-#define WHITE 0
-#define GREY 1
-#define UNCHECKED -1
-
-struct no;
-typedef struct no No;
-
 class Grafo
 {
 
@@ -34,6 +27,7 @@ public:
     int degree(int);
     int getNumberVertex();
     bool isDirected();
+    
     // Questao 1
     void coloringWithTwoColors(int);
 

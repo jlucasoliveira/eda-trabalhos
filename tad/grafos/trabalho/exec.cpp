@@ -49,29 +49,23 @@ void delete_graphs(vector<Grafo*> *graphs)
 
 int main()
 {   
-    
     srand(time(NULL));
-    vector<Grafo*> *grafos1 = get_from_file("grafos1.txt", false);
+    vector<Grafo*> *grafos = get_from_file("grafos.txt", true);
 
-    /*
     // QUESTAO 1
 
-    for (Grafo *grafo : *grafos1)
+    cout << "QUESTAO 1:" << endl;
+    for (Grafo *grafo : *grafos)
     {
         int rn = rand()%(grafo->getNumberVertex());
         grafo->coloringWithTwoColors(rn);
     }
-    */
 
     //QUESTAO 2
 
-    for (Grafo *grafo : *grafos1)
-    {
-        grafo->printMatrix();
-        cout << endl;
+    cout << endl << "QUESTAO 2:" << endl;
+    for (Grafo *grafo : *grafos)
         grafo->detectingQuatraticCycles();
-        cout << endl;
-    }
-
-    delete_graphs(grafos1);
+    
+    delete_graphs(grafos);
 }
