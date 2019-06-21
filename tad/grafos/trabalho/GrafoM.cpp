@@ -215,18 +215,24 @@ void Grafo::detectingQuatraticCycles()
 			for (int k = 0; k < size; k++)
 				mult[i][j] += this->M[i][k] * this->M[k][j];
 
+	// percorrendo a matriz
 	for (int i = 0; i < size; i++)
 		for (int j = 0; j < size; j++)
 		{
 			if (!this->directed)
 			{
+				// como num grafo nao-direcionado o resultado de M^2
+				// e a quantidade de caminhos de u a v, para haver um ciclo
+				// este valor tem que ser >= 2, logo
 				if (i != j && mult[i][j] == mult[j][i] && mult[j][i] > 1)
 				{
 					int aux = 0, k = 0;
+					// procura o primeiro "eixo" entre estes vertices
 					for (; k < size; k++)
 						if (this->M[k][i] == this->M[k][j])
 							break;
 					aux = k++;
+					// procura o sefundo "eixo", se achar printa SIM
 					for (; k < size; k++)
 						if (this->M[k][i] == this->M[k][j])
 							if (mult[aux][k] == mult[k][aux] && mult[k][j] > 1 )
@@ -240,6 +246,8 @@ void Grafo::detectingQuatraticCycles()
 			{
 				if (i != j && mult[i][j] == mult[j][i])
 				{
+					// similar ao primeiro caso apenas procuramos o "eixo"
+					// do caminho de u a v
 					for (int k = 0; k < size; k++)
 						if (this->M[k][i] == 1 && this->M[j][k] == 1)
 						{
@@ -249,15 +257,7 @@ void Grafo::detectingQuatraticCycles()
 				}
 			}
 		}
+
 	cout << "NAO" << endl;
-	
-	/*
-	for (int i = 0; i < size; i++)
-	{
-		for (int j = 0; j < size; j++)
-			cout << setw(1) << mult[i][j] << " ";
-		cout << endl;
-	}
-	cout << endl;
-	*/
+
 }
